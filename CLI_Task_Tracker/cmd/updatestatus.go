@@ -10,8 +10,8 @@ import (
 
 // updatestatusCmd represents the updatestatus command
 var updatestatusCmd = &cobra.Command{
-	Use:   "updatestatus",
-	Short: "A brief description of your command",
+	Use:   "updatestatus [id] [status]",
+	Short: "Update Status of task",
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		id, err := strconv.Atoi(args[0])
@@ -19,7 +19,7 @@ var updatestatusCmd = &cobra.Command{
 			return fmt.Errorf("task id must be a number")
 		}
 		status := args[1]
-		if (status == "todo") || (status == "done") {
+		if (status == "todo") || (status == "done") || (status == "in-progress") {
 			if err := internal.UpdateTaskStatus(id, status); err != nil {
 				return err
 			}
@@ -33,14 +33,4 @@ var updatestatusCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(updatestatusCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// updatestatusCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// updatestatusCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
