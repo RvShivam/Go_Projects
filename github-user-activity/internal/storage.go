@@ -6,27 +6,31 @@ import (
 	"strings"
 )
 
+func appDir() (string, error) {
+	exe, err := os.Executable()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Dir(exe), nil
+}
+
 func SaveUser(username string) error {
-	path, err := os.UserConfigDir()
+	dir, err := appDir()
 	if err != nil {
 		return err
 	}
 
-	file := filepath.Join(path, "github-activity", "user")
-	if err := os.MkdirAll(filepath.Dir(file), 0755); err != nil {
-		return err
-	}
-
+	file := filepath.Join(dir, "user")
 	return os.WriteFile(file, []byte(username), 0644)
 }
 
 func LoadUser() (string, error) {
-	path, err := os.UserConfigDir()
+	dir, err := appDir()
 	if err != nil {
 		return "", err
 	}
 
-	file := filepath.Join(path, "github-activity", "user")
+	file := filepath.Join(dir, "user")
 	data, err := os.ReadFile(file)
 	if err != nil {
 		if os.IsNotExist(err) {
